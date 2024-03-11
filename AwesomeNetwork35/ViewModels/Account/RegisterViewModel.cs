@@ -15,6 +15,11 @@ namespace AwesomeNetwork35.ViewModels.Account
         [Display(Name = "Фамилия", Prompt = "Введите фамилию")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Поле Отчество обязательно для заполнения")]
+        [DataType(DataType.Text)]
+        [Display(Name = "Отчество", Prompt = "Введите отчество")]
+        public string MiddleName { get; set; }
+
         [Required(ErrorMessage = "Поле Email обязательно для заполнения")]
         [EmailAddress]
         [Display(Name = "Email", Prompt = "example.com")]
