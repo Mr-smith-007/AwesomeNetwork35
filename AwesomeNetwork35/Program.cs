@@ -1,3 +1,5 @@
+using AutoMapper;
+using AwesomeNetwork35;
 using AwesomeNetwork35.Data;
 using AwesomeNetwork35.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var mapperConfig = new MapperConfiguration((v) =>
+{
+    v.AddProfile(new MappingProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection))

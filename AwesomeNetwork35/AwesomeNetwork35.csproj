@@ -18,9 +18,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Repository\" />
-    <Folder Include="Data\UoW\" />
-  </ItemGroup>
-
 </Project>
