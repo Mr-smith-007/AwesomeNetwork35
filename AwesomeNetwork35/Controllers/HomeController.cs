@@ -1,4 +1,5 @@
 using AwesomeNetwork35.Models;
+using AwesomeNetwork35.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,7 +16,7 @@ namespace AwesomeNetwork35.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(new MainViewModel());
         }
 
         public IActionResult Privacy()

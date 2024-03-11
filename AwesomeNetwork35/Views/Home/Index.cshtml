@@ -1,4 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity;
+@using AwesomeNetwork35.Models.Users;
+
+
+@model AwesomeNetwork35.ViewModels.Account.MainViewModel;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,8 +15,8 @@
 
 
     <div class="main">
-        блок регистрации
-        блок авторизации
+        @* <partial name="Login" model="@Model.LoginView" /> *@
+        <partial name="Register" model="@Model.RegisterView" />
     </div>
 
 </div>
