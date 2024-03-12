@@ -22,7 +22,9 @@ builder.Services.AddSingleton(mapper);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection))
-    .AddUnitOfWork().AddCustomRepository<Friend, FriendsRepository>()
+    .AddUnitOfWork()
+    .AddCustomRepository<Friend, FriendsRepository>()
+    .AddCustomRepository<Message, MessageRepository>()
     .AddIdentity<User, IdentityRole>(opts =>
     {
         opts.Password.RequiredLength = 5;
