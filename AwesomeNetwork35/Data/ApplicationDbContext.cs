@@ -1,4 +1,5 @@
-﻿using AwesomeNetwork35.Models.Users;
+﻿using AwesomeNetwork35.Configurations;
+using AwesomeNetwork35.Models.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,12 @@ namespace AwesomeNetwork35.Data
             Database.EnsureCreated();
         }
 
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-        //    builder.ApplyConfiguration(new FriendConfiguration());
-        //    builder.ApplyConfiguration(new MessageConfuiguration());
-        //}
+            builder.ApplyConfiguration(new FriendConfiguration());
+            //    builder.ApplyConfiguration(new MessageConfuiguration());
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AwesomeNetwork35.Data.Repository;
 using AwesomeNetwork35.Data.UoW;
 using AwesomeNetwork35.Extentions;
 using AwesomeNetwork35.Models.Users;
@@ -13,15 +14,17 @@ namespace AwesomeNetwork35.Controllers.Account
     public class AccountManagerController : Controller
     {
         private IMapper _mapper;
+        private IUnitOfWork _unitOfWork;
 
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountManagerController(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+        public AccountManagerController(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         [Route("Login")]
@@ -72,22 +75,12 @@ namespace AwesomeNetwork35.Controllers.Account
 
             var model = new UserViewModel(result);
 
-            //model.Friends = await GetAllFriend(model.User);
+            model.Friends = await GetAllFriend(model.User);
 
             return View("User", model);
         }
 
-        //private async Task<List<User>> GetAllFriend()
-        //{
-        //    var user = User;
-
-        //    var result = await _userManager.GetUserAsync(user);
-
-        //    var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
-
-        //    return repository.GetFriendsByUser(result);
-        //}
-
+       
         [Route("Logout")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -136,6 +129,67 @@ namespace AwesomeNetwork35.Controllers.Account
                 ModelState.AddModelError("", "Некорректные данные");
                 return View("Edit", model);
             }
+        }
+
+        [Route("UserList")]
+        [HttpGet]
+        public async Task<IActionResult> UserList(string search)
+        {
+            var model = await CreateSearch(search);
+            return View("UserList", model);
+        }
+
+        private async Task<SearchViewModel> CreateSearch(string search)
+        {
+            var currentuser = User;
+
+            var result = await _userManager.GetUserAsync(currentuser);
+
+            var list = _userManager.Users.AsEnumerable().ToList();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                list = list.Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+            }
+            else
+            {
+                list = _userManager.Users.AsEnumerable().ToList();
+            }
+
+            var withfriend = await GetAllFriend();
+
+            var data = new List<UserWithFriendExt>();
+            list.ForEach(x =>
+            {
+                var t = _mapper.Map<UserWithFriendExt>(x);
+                t.IsFriendWithCurrent = withfriend.Where(y => y.Id == x.Id || x.Id == result.Id).Count() != 0;
+                data.Add(t);
+            });
+
+            var model = new SearchViewModel()
+            {
+                UserList = data
+            };
+
+            return model;
+        }
+
+        private async Task<List<User>> GetAllFriend(User user)
+        {
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+
+            return repository.GetFriendsByUser(user);
+        }
+
+        private async Task<List<User>> GetAllFriend()
+        {
+            var user = User;
+
+            var result = await _userManager.GetUserAsync(user);
+
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+
+            return repository.GetFriendsByUser(result);
         }
 
     }
