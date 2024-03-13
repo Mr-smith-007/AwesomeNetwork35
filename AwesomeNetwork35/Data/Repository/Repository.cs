@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeNetwork35.Data.Repository
 {
-    public class Repository<T> : IRepository<T> where T: class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected DbContext _db;
 
@@ -18,21 +18,21 @@ namespace AwesomeNetwork35.Data.Repository
             Set = set;
         }
 
-        public async Task Create(T item)
+        public void Create(T item)
         {
-            await Set.AddAsync(item);
-            await _db.SaveChangesAsync();
+            Set.Add(item);
+            _db.SaveChanges();
         }
 
-        public async Task Delete(T item)
+        public void Delete(T item)
         {
             Set.Remove(item);
-            await _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
 
-        public async Task<T> Get(int id)
+        public T Get(int id)
         {
-            return await Set.FindAsync(id);
+            return Set.Find(id);
         }
 
         public IEnumerable<T> GetAll()
@@ -40,10 +40,10 @@ namespace AwesomeNetwork35.Data.Repository
             return Set;
         }
 
-        public async Task Update(T item)
+        public void Update(T item)
         {
             Set.Update(item);
-            await _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
     }
 }

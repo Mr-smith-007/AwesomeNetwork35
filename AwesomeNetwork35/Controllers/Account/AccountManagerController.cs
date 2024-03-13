@@ -208,7 +208,7 @@ namespace AwesomeNetwork35.Controllers.Account
 
             var result = await _userManager.GetUserAsync(user);
 
-            var repository =  _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
             return await repository.GetFriendsByUser(result);
         }
@@ -267,7 +267,7 @@ namespace AwesomeNetwork35.Controllers.Account
 
             var repository = _unitOfWork.GetRepository<Message>() as MessageRepository;
 
-            var mess = await repository.GetMessages(result, friend);
+            var mess = repository.GetMessages(result, friend);
 
             var model = new ChatViewModel()
             {

@@ -1,13 +1,18 @@
 ﻿@model AwesomeNetwork35.ViewModels.Account.SearchViewModel;
 
 <div class="block-reg background-white">
-
+    <div>
+        <form method="get" asp-controller="AccountManager" asp-action="MyPage">
+            <input class="enter_submit" type="submit" value="Назад" />
+        </form>
+    </div>
     @if (Model.UserList.Count != 0)
     {
 
         @foreach (var user in @Model.UserList)
         {
             <div>
+                <img src="@user.Image" class="ava" />
                 <label>@user.GetFullName()</label>
                 @if (!@user.IsFriendWithCurrent)
                 {

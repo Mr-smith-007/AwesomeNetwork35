@@ -8,7 +8,7 @@ namespace AwesomeNetwork35.Data.Repository
     {
         public FriendsRepository(ApplicationDbContext db): base(db) {}
 
-        public async Task AddFriend(User target, User Friend)
+        public void AddFriend(User target, User Friend)
         {
             var friends = Set.AsEnumerable().FirstOrDefault(x => x.UserId == target.Id && x.CurrentFriendId == Friend.Id);
 
@@ -22,7 +22,7 @@ namespace AwesomeNetwork35.Data.Repository
                     CurrentFriendId = Friend.Id,
                 };
 
-                await Create(item);
+                Create(item);
             }
         }
 
@@ -30,17 +30,20 @@ namespace AwesomeNetwork35.Data.Repository
         {
             var friends = Set.Include(x => x.CurrentFriend).AsQueryable().Where(x => x.User.Id == target.Id).Select(x => x.CurrentFriend);
 
-            return await friends.ToListAsync();
+            if (friends is null)
+                return new List<User>();
+            else
+                return await friends.ToListAsync();
         }
 
 
-        public async Task DeleteFriend(User target, User Friend)
+        public void DeleteFriend(User target, User Friend)
         {
-            var friends = Set.AsQueryable().FirstOrDefault(x => x.UserId == target.Id && x.CurrentFriendId == Friend.Id);
+            var friends = Set.AsEnumerable().FirstOrDefault(x => x.UserId == target.Id && x.CurrentFriendId == Friend.Id);
 
             if (friends != null)
             {
-               await  Delete(friends);
+                Delete(friends);
             }
         }
     }

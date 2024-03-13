@@ -19,7 +19,7 @@ namespace AwesomeNetwork35.Models.Users
 
         public string About { get; set; }
 
-        public string GetFullName()
+        public string? GetFullName()
         {
             return FirstName + " " + MiddleName + " " + LastName;
         }
