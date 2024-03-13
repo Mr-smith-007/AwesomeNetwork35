@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AwesomeNetwork35.Data;
 using AwesomeNetwork35.Data.Repository;
 using AwesomeNetwork35.Data.UoW;
 using AwesomeNetwork35.Extentions;
@@ -26,6 +27,26 @@ namespace AwesomeNetwork35.Controllers.Account
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+
+        [Route("Generate")]
+        [HttpGet]
+        public async Task<IActionResult> Generate()
+        {
+
+            var usergen = new GenerateUsers();
+            var userlist = usergen.Populate(35);
+
+            foreach (var user in userlist)
+            {
+                var result = await _userManager.CreateAsync(user, "123456");
+
+                if (!result.Succeeded)
+                    continue;
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
 
         [Route("Login")]
         [HttpGet]
