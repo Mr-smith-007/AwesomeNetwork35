@@ -310,7 +310,7 @@ namespace AwesomeNetwork35.Controllers.Account
             repository.Create(item);
 
             var model = await GenerateChat(id);
-            return View("Chat", model);
+            return RedirectToAction("Chat", "AccountManager", new { id = id });
         }
 
     }
