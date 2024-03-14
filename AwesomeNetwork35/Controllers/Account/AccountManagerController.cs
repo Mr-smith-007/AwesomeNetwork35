@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeNetwork35.Controllers.Account
 {
@@ -225,7 +226,7 @@ namespace AwesomeNetwork35.Controllers.Account
 
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
-            repository.AddFriend(result, friend);
+            await repository.AddFriend(result, friend);
 
 
             return RedirectToAction("MyPage", "AccountManager");
@@ -243,7 +244,7 @@ namespace AwesomeNetwork35.Controllers.Account
 
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
-            repository.DeleteFriend(result, friend);
+            await repository.DeleteFriend(result, friend);
 
             return RedirectToAction("MyPage", "AccountManager");
 
@@ -267,13 +268,13 @@ namespace AwesomeNetwork35.Controllers.Account
 
             var repository = _unitOfWork.GetRepository<Message>() as MessageRepository;
 
-            var mess = repository.GetMessages(result, friend);
+            var mess = await repository.GetMessages(result, friend);
 
             var model = new ChatViewModel()
             {
                 You = result,
                 ToWhom = friend,
-                History = mess.OrderBy(x => x.Id).ToList(),
+                History = await mess.AsQueryable().OrderBy(x => x.Id).ToListAsync()
             };
 
             return model;
@@ -307,7 +308,7 @@ namespace AwesomeNetwork35.Controllers.Account
                 Recipient = friend,
                 Text = chat.NewMessage.Text,
             };
-            repository.Create(item);
+            await repository.Create(item);
 
             var model = await GenerateChat(id);
             return RedirectToAction("Chat", "AccountManager", new { id = id });
