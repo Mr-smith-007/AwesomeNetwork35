@@ -274,7 +274,7 @@ namespace AwesomeNetwork35.Controllers.Account
             {
                 You = result,
                 ToWhom = friend,
-                History =  mess.OrderBy(x => x.Id).ToList()
+                History =  mess.AsQueryable().OrderBy(x => x.Id).ToList()
             };
 
             return model;
