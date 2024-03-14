@@ -274,7 +274,7 @@ namespace AwesomeNetwork35.Controllers.Account
             {
                 You = result,
                 ToWhom = friend,
-                History = await mess.AsQueryable().OrderBy(x => x.Id).ToListAsync()
+                History =  mess.OrderBy(x => x.Id).ToList()
             };
 
             return model;
@@ -309,8 +309,7 @@ namespace AwesomeNetwork35.Controllers.Account
                 Text = chat.NewMessage.Text,
             };
             await repository.Create(item);
-
-            var model = await GenerateChat(id);
+                        
             return RedirectToAction("Chat", "AccountManager", new { id = id });
         }
 
