@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeNetwork35.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240313160621_Initial")]
+    [Migration("20240314054852_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
